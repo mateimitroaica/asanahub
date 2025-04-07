@@ -1,0 +1,62 @@
+CREATE TABLE studio (
+                        id BIGINT PRIMARY KEY,
+                        name VARCHAR(255),
+                        location VARCHAR(255)
+);
+
+CREATE TABLE yoga_user (
+                           id BIGINT PRIMARY KEY,
+                           first_name VARCHAR(100),
+                           last_name VARCHAR(100),
+                           age INT,
+                           email VARCHAR(255),
+                           password VARCHAR(255),
+                           gender VARCHAR(10)
+);
+
+CREATE TABLE yoga_instructor (
+                                 id BIGINT PRIMARY KEY,
+                                 first_name VARCHAR(100),
+                                 last_name VARCHAR(100),
+                                 age INT,
+                                 gender VARCHAR(10)
+);
+
+CREATE TABLE yoga_style (
+                            id BIGINT PRIMARY KEY,
+                            class_type VARCHAR(50)
+);
+
+CREATE TABLE yoga_class (
+                            id BIGINT PRIMARY KEY,
+                            name VARCHAR(255),
+                            time_and_date TIMESTAMP,
+                            price DOUBLE,
+                            yoga_style_id BIGINT,
+                            studio_id BIGINT,
+                            instructor_id BIGINT,
+                            FOREIGN KEY (yoga_style_id) REFERENCES yoga_style(id),
+                            FOREIGN KEY (studio_id) REFERENCES studio(id),
+                            FOREIGN KEY (instructor_id) REFERENCES yoga_instructor(id)
+);
+
+CREATE TABLE subscription (
+                              id BIGINT PRIMARY KEY,
+                              price DOUBLE,
+                              start_date DATE,
+                              end_date DATE,
+                              is_active BOOLEAN,
+                              subscription_type VARCHAR(50),
+                              studio_id BIGINT,
+                              user_id BIGINT,
+                              FOREIGN KEY (studio_id) REFERENCES studio(id),
+                              FOREIGN KEY (user_id) REFERENCES yoga_user(id)
+);
+
+CREATE TABLE reservations (
+                              user_id BIGINT,
+                              yoga_class_id BIGINT,
+                              PRIMARY KEY (user_id, yoga_class_id),
+                              FOREIGN KEY (user_id) REFERENCES yoga_user(id),
+                              FOREIGN KEY (yoga_class_id) REFERENCES yoga_class(id)
+);
