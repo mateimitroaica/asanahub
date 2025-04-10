@@ -105,4 +105,9 @@ public class YogaClass {
     public void setUsers(List<YogaUser> users) {
         this.users = users;
     }
+
+    public void removeUser(YogaUser user) {
+        this.users.remove(user);
+        user.getReservations().remove(this);
+    }
 }

@@ -28,7 +28,7 @@ CREATE TABLE yoga_style (
 );
 
 CREATE TABLE yoga_class (
-                            id BIGINT PRIMARY KEY,
+                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                             name VARCHAR(255),
                             time_and_date TIMESTAMP,
                             price DOUBLE,
@@ -60,3 +60,5 @@ CREATE TABLE reservations (
                               FOREIGN KEY (user_id) REFERENCES yoga_user(id),
                               FOREIGN KEY (yoga_class_id) REFERENCES yoga_class(id)
 );
+
+ALTER TABLE yoga_class ALTER COLUMN id RESTART WITH 100;

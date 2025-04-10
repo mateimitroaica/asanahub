@@ -29,4 +29,44 @@ public class Studio {
         this.subscriptions = subscriptions;
         this.yogaClasses = yogaClasses;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public List<YogaClass> getYogaClasses() {
+        return yogaClasses;
+    }
+
+    public void setYogaClasses(List<YogaClass> yogaClasses) {
+        this.yogaClasses = yogaClasses;
+    }
 }
