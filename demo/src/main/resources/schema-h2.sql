@@ -5,7 +5,7 @@ CREATE TABLE studio (
 );
 
 CREATE TABLE yoga_user (
-                           id BIGINT PRIMARY KEY,
+                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
                            first_name VARCHAR(100),
                            last_name VARCHAR(100),
                            age INT,
@@ -41,7 +41,7 @@ CREATE TABLE yoga_class (
 );
 
 CREATE TABLE subscription (
-                              id BIGINT PRIMARY KEY,
+                              id BIGINT AUTO_INCREMENT PRIMARY KEY,
                               price DOUBLE,
                               start_date DATE,
                               end_date DATE,
@@ -64,3 +64,5 @@ CREATE TABLE reservations (
 ALTER TABLE yoga_class ALTER COLUMN id RESTART WITH 100;
 ALTER TABLE yoga_style ALTER COLUMN id RESTART WITH 100;
 ALTER TABLE studio ALTER COLUMN id RESTART WITH 100;
+ALTER TABLE yoga_user ALTER COLUMN id RESTART WITH 100;
+ALTER TABLE subscription ALTER COLUMN id RESTART WITH 100;

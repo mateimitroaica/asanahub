@@ -74,4 +74,9 @@ public class Studio {
         yogaClass.setStudio(null);
         this.yogaClasses.remove(yogaClass);
     }
+
+    public void removeSubscription(Subscription subscription) {
+        subscription.setStudio(null);
+        this.subscriptions.remove(subscription);
+    }
 }

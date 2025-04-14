@@ -121,4 +121,9 @@ public class YogaUser {
         this.reservations.remove(yogaClass);
         yogaClass.getUsers().remove(this);
     }
+
+    public void removeSubscription(Subscription subscription) {
+        subscriptions.remove(subscription);
+        this.subscriptions.remove(subscription);
+    }
 }
