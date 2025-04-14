@@ -1,5 +1,5 @@
 CREATE TABLE studio (
-                        id BIGINT PRIMARY KEY,
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(255),
                         location VARCHAR(255)
 );
@@ -23,7 +23,7 @@ CREATE TABLE yoga_instructor (
 );
 
 CREATE TABLE yoga_style (
-                            id BIGINT PRIMARY KEY,
+                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                             class_type VARCHAR(50)
 );
 
@@ -62,3 +62,5 @@ CREATE TABLE reservations (
 );
 
 ALTER TABLE yoga_class ALTER COLUMN id RESTART WITH 100;
+ALTER TABLE yoga_style ALTER COLUMN id RESTART WITH 100;
+ALTER TABLE studio ALTER COLUMN id RESTART WITH 100;

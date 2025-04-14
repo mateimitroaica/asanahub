@@ -79,4 +79,9 @@ public class YogaInstructor {
     public void setClasses(List<YogaClass> classes) {
         this.classes = classes;
     }
+
+    public void removeYogaClass(YogaClass yogaClass) {
+        yogaClass.setInstructor(null);
+        this.classes.remove(yogaClass);
+    }
 }

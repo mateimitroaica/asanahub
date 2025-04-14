@@ -69,4 +69,9 @@ public class Studio {
     public void setYogaClasses(List<YogaClass> yogaClasses) {
         this.yogaClasses = yogaClasses;
     }
+
+    public void removeYogaClass(YogaClass yogaClass) {
+        yogaClass.setStudio(null);
+        this.yogaClasses.remove(yogaClass);
+    }
 }
