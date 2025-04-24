@@ -7,6 +7,8 @@ import com.example.demo.domain.YogaStyle;
 import com.example.demo.dto.YogaClassDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class YogaClassMapper {
 
@@ -18,22 +20,39 @@ public class YogaClassMapper {
         yogaClass.setTimeAndDate(dto.getTimeAndDate());
         yogaClass.setPrice(dto.getPrice());
 
-        YogaStyle style = new YogaStyle();
-        style.setClassType(dto.getType());
-        yogaClass.setYogaStyle(style);
+        return yogaClass;
+    }
+
+    public static Studio toStudio(YogaClassDTO dto) {
+        if (dto == null) return null;
 
         Studio studio = new Studio();
         studio.setName(dto.getStudioName());
         studio.setLocation(dto.getStudioLocation());
-        yogaClass.setStudio(studio);
+        studio.setYogaClasses(new ArrayList<>());
+
+        return studio;
+    }
+
+    public static YogaInstructor toYogaInstructor(YogaClassDTO dto) {
+        if (dto == null) return null;
 
         YogaInstructor instructor = new YogaInstructor();
         instructor.setFirstName(dto.getInstructorFirstName());
         instructor.setLastName(dto.getInstructorLastName());
         instructor.setAge(dto.getInstructorAge());
         instructor.setGender(dto.getInstructorGender());
-        yogaClass.setInstructor(instructor);
+        instructor.setClasses(new ArrayList<>());
 
-        return yogaClass;
+        return instructor;
+    }
+
+    public static YogaStyle toYogaStyle(YogaClassDTO dto) {
+        if (dto == null) return null;
+
+        YogaStyle style = new YogaStyle();
+        style.setClassType(dto.getType());
+
+        return style;
     }
 }

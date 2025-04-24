@@ -37,40 +37,42 @@ public class YogaClassService {
     public YogaClass saveYogaClass(YogaClassDTO yogaClassDTO) {
         YogaClass yogaClass = YogaClassMapper.toEntity(yogaClassDTO);
 
-        YogaStyle yogaStyle = yogaClass.getYogaStyle();
-        yogaStyle.setYogaClass(yogaClass);
-        yogaStyle = yogaStyleRepository.save(yogaStyle);
-
-        yogaClass.setYogaStyle(yogaStyle);
-
-        Optional<Studio> optionalStudio = yogaStudioRepository.findByName(yogaClassDTO.getStudioName());
         Studio studio;
-        if (optionalStudio.isPresent()) {
-            studio = optionalStudio.get();
+        Optional<Studio> existingStudio = yogaStudioRepository
+                .findByName(yogaClassDTO.getStudioName());
+
+        if (existingStudio.isPresent()) {
+            studio = existingStudio.get();
         } else {
-            studio = yogaClass.getStudio();
-            studio.setYogaClasses(new ArrayList<>());
+            studio = YogaClassMapper.toStudio(yogaClassDTO);
+            studio = yogaStudioRepository.save(studio);
         }
         yogaClass.setStudio(studio);
         studio.getYogaClasses().add(yogaClass);
 
-        Optional<YogaInstructor> optionalYogaInstructor = yogaInstructorRepository
-                .findYogaInstructorByFirstNameAndLastName(yogaClassDTO.getInstructorFirstName(),
-                        yogaClassDTO.getInstructorLastName());
-        YogaInstructor yogaInstructor;
-        if (optionalYogaInstructor.isPresent()) {
-            yogaInstructor = optionalYogaInstructor.get();
+        YogaInstructor instructor;
+        Optional<YogaInstructor> existing = yogaInstructorRepository
+                .findYogaInstructorByFirstNameAndLastName(yogaClassDTO.getInstructorFirstName(), yogaClassDTO.getInstructorLastName());
+
+        if (existing.isPresent()) {
+            instructor = existing.get();
         } else {
-            yogaInstructor = yogaClass.getInstructor();
-            yogaInstructor.setClasses(new ArrayList<>());
+            instructor = YogaClassMapper.toYogaInstructor(yogaClassDTO);
+            instructor = yogaInstructorRepository.save(instructor);
         }
-        yogaClass.setInstructor(yogaInstructor);
-        yogaInstructor.getClasses().add(yogaClass);
+        yogaClass.setInstructor(instructor);
+        instructor.getClasses().add(yogaClass);
 
-        yogaStudioRepository.save(studio);
-        yogaInstructorRepository.save(yogaInstructor);
+        YogaStyle style = YogaClassMapper.toYogaStyle(yogaClassDTO);
 
-        return yogaClassRepository.save(yogaClass);
+        YogaClass savedClass = yogaClassRepository.save(yogaClass);
+
+        style.setYogaClass(savedClass);
+        style = yogaStyleRepository.save(style);
+        savedClass.setYogaStyle(style);
+
+        return yogaClassRepository.save(savedClass);
+
     }
 
 }
