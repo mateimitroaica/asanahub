@@ -15,7 +15,7 @@ CREATE TABLE yoga_user (
 );
 
 CREATE TABLE yoga_instructor (
-                                 id BIGINT PRIMARY KEY,
+                                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                  first_name VARCHAR(100),
                                  last_name VARCHAR(100),
                                  age INT,
