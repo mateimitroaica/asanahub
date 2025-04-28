@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Yoga Class</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar">
+    <a href="/yoga-classes">Home</a>
+    <a href="/yoga-classes/create">Create New Class</a>
+</nav>
+<div class="form-container">
+<form th:action="@{/yoga-classes/edit/{id}(id=${clazz.id})}" th:object="${yogaClassDTO}" method="post">
+
+    <input type="hidden" name="_method" value="put"/>
+
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" />
+
+    <label for="timeAndDate">Time and Date:</label>
+    <input type="datetime-local" id="timeAndDate" name="timeAndDate"
+           th:value="${yogaClassDTO.formattedTimeAndDate}" />
+
+    <label>Price:</label>
+    <input type="number" th:field="*{price}" step="0.01"/>
+
+    <label>Studio Name:</label>
+    <input type="text" th:field="*{studioName}" />
+
+    <label>Studio Location:</label>
+    <input type="text" th:field="*{studioLocation}" />
+
+    <label>Instructor First Name:</label>
+    <input type="text" th:field="*{instructorFirstName}" />
+
+    <label>Instructor Last Name:</label>
+    <input type="text" th:field="*{instructorLastName}" />
+
+    <label>Instructor Age:</label>
+    <input type="number" th:field="*{instructorAge}" />
+
+    <label>Instructor Gender:</label>
+    <select th:field="*{instructorGender}">
+        <option th:value="MALE" th:text="'Male'"></option>
+        <option th:value="FEMALE" th:text="'Female'"></option>
+    </select>
+
+    <label>Class Type:</label>
+    <select th:field="*{type}">
+        <option th:value="VINYASA" th:text="'Vinyasa'"></option>
+        <option th:value="HATHA" th:text="'Hatha'"></option>
+        <option th:value="PRENATAL" th:text="'Prenatal'"></option>
+        <option th:value="ASHTANGA" th:text="'Ashtanga'"></option>
+        <option th:value="ANUSARA" th:text="'Anusara'"></option>
+        <option th:value="KUNDALINI" th:text="'Kundalini'"></option>
+        <option th:value="BIKRAM" th:text="'Bikram'"></option>
+    </select>
+
+    <button type="submit">Save Changes</button>
+
+</form>
+</div>
+</body>
+</html>

@@ -7,10 +7,28 @@ import com.example.demo.domain.YogaStyle;
 import com.example.demo.dto.YogaClassDTO;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Component
 public class YogaClassMapper {
+    public static YogaClassDTO toDTO(YogaClass yogaClass) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        YogaClassDTO dto = new YogaClassDTO();
+        dto.setStudioName(yogaClass.getStudio().getName());
+        dto.setStudioLocation(yogaClass.getStudio().getLocation());
+        dto.setName(yogaClass.getName());
+        dto.setTimeAndDate(yogaClass.getTimeAndDate());
+        dto.setPrice(yogaClass.getPrice());
+        dto.setType(yogaClass.getYogaStyle().getClassType());
+        dto.setInstructorFirstName(yogaClass.getInstructor().getFirstName());
+        dto.setInstructorLastName(yogaClass.getInstructor().getLastName());
+        dto.setInstructorAge(yogaClass.getInstructor().getAge());
+        dto.setInstructorGender(yogaClass.getInstructor().getGender());
+
+        dto.setFormattedTimeAndDate(yogaClass.getTimeAndDate().format(formatter));
+        return dto;
+    }
 
     public static YogaClass toEntity(YogaClassDTO dto) {
         if (dto == null) return null;

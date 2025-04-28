@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Yoga Class</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar">
+  <a href="/yoga-classes">Home</a>
+  <a href="/yoga-classes/create">Create New Class</a>
+</nav>
+<h1>Create a New Yoga Class</h1>
+<div class="form-container">
+  <form th:action="@{/yoga-classes}" th:object="${yogaClassDTO}" method="post">
+
+    <label for="name">Class Name:</label>
+    <input type="text" id="name" th:field="*{name}" required />
+
+    <label for="timeAndDate">Date and Time:</label>
+    <input type="datetime-local" id="timeAndDate" th:field="*{timeAndDate}" required />
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" th:field="*{price}" step="0.01" required />
+
+    <label for="studioName">Studio Name:</label>
+    <input type="text" id="studioName" th:field="*{studioName}" required />
+
+    <label for="studioLocation">Studio Location:</label>
+    <input type="text" id="studioLocation" th:field="*{studioLocation}" required />
+
+    <label for="instructorFirstName">Instructor First Name:</label>
+    <input type="text" id="instructorFirstName" th:field="*{instructorFirstName}" required />
+
+    <label for="instructorLastName">Instructor Last Name:</label>
+    <input type="text" id="instructorLastName" th:field="*{instructorLastName}" required />
+
+    <label for="instructorAge">Instructor Age:</label>
+    <input type="number" id="instructorAge" th:field="*{instructorAge}" required />
+
+    <label for="instructorGender">Instructor Gender:</label>
+    <select id="instructorGender" th:field="*{instructorGender}" required>
+      <option value="FEMALE">Female</option>
+      <option value="MALE">Male</option>
+    </select>
+
+    <label for="type">Yoga Class Type:</label>
+    <select id="type" th:field="*{type}" required>
+      <option value="HATHA">Hatha</option>
+      <option value="ASHTANGA">Ashtanga</option>
+      <option value="VINYASA">Vinyasa</option>
+      <option value="ANUSARA">Anusara</option>
+      <option value="PRENATAL">Prenatal</option>
+      <option value="KUNDALINI">Kundalini</option>
+      <option value="BIKRAM">Bikram</option>
+    </select>
+
+    <button type="submit">Save Yoga Class</button>
+  </form>
+
+</body>
+</html>

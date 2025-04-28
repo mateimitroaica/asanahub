@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Yoga Classes</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar">
+    <a href="/yoga-classes">Home</a>
+    <a href="/yoga-classes/create">Create New Class</a>
+</nav>
+<div class="classes-container">
+    <div th:each="clazz : ${classes}" class="class-card">
+        <h2 th:text="${clazz.name}">Yoga Class Name</h2>
+
+        <p><strong>Studio:</strong> <span th:text="${clazz.studio.name}">Studio Name</span> (<span th:text="${clazz.studio.location}">Location</span>)</p>
+
+        <p><strong>Instructor:</strong>
+            <span th:text="${clazz.instructor.firstName}">First Name</span>
+            <span th:text="${clazz.instructor.lastName}">Last Name</span>
+        </p>
+
+        <p><strong>Date:</strong> <span th:text="${#temporals.format(clazz.timeAndDate, 'dd MMM yyyy')}">05 May 2025</span></p>
+
+        <p><strong>Time:</strong> <span th:text="${#temporals.format(clazz.timeAndDate, 'HH:mm')}">06:30</span></p>
+
+        <p><strong>Price:</strong> $<span th:text="${clazz.price}">30</span></p>
+
+        <p><strong>Style:</strong> <span th:text="${clazz.yogaStyle.classType}">Vinyasa</span></p>
+        <div class="button-group">
+            <button type="button" class="edit-button" th:attr="onclick=|editYogaClass(${clazz.id})|">Edit</button>
+            <button type="button" class="delete-button" th:attr="onclick=|deleteYogaClass(${clazz.id})|">
+                Delete
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script th:src="@{/js/yoga.js}"></script>
+</body>
+</html>

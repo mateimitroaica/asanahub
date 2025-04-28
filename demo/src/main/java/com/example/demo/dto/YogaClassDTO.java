@@ -16,6 +16,7 @@ public class YogaClassDTO {
     private String instructorLastName;
     private Integer instructorAge;
     private Gender instructorGender;
+    private String formattedTimeAndDate;
 
 
     public YogaClassDTO() {}
@@ -111,5 +112,13 @@ public class YogaClassDTO {
 
     public void setInstructorGender(Gender instructorGender) {
         this.instructorGender = instructorGender;
+    }
+
+    public String getFormattedTimeAndDate() {
+        return formattedTimeAndDate;
+    }
+
+    public void setFormattedTimeAndDate(String formattedTimeAndDate) {
+        this.formattedTimeAndDate = formattedTimeAndDate;
     }
 }

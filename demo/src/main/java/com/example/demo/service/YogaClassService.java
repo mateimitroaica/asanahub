@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,7 +34,7 @@ public class YogaClassService {
         this.yogaStyleRepository = yogaStyleRepository;
     }
 
-    @Transactional
+//    @Transactional
     public YogaClass saveYogaClass(YogaClassDTO yogaClassDTO) {
         YogaClass yogaClass = YogaClassMapper.toEntity(yogaClassDTO);
 
@@ -72,6 +73,73 @@ public class YogaClassService {
         savedClass.setYogaStyle(style);
 
         return yogaClassRepository.save(savedClass);
+
+    }
+
+    public List<YogaClass> findAllClasses() {
+        return yogaClassRepository.findAll();
+    }
+
+    public YogaClass findYogaClassById(Long id) {
+        return yogaClassRepository.findById(id).orElse(null);
+    }
+
+    public void deleteYogaClass(Long id) {
+        Optional<YogaClass> optionalYogaClass = yogaClassRepository.findById(id);
+        if (optionalYogaClass.isPresent()){
+            YogaClass yogaClass = optionalYogaClass.get();
+            YogaStyle style = yogaClass.getYogaStyle();
+            yogaClass.setYogaStyle(null);
+            style.setYogaClass(null);
+            yogaClassRepository.delete(yogaClass);
+            yogaStyleRepository.delete(style);
+        }
+    }
+
+    public YogaClass updateYogaClass(Long id, YogaClassDTO yogaClassDTO) {
+        YogaClass yogaClass = yogaClassRepository.findById(id).orElseThrow(
+                ()->new RuntimeException("YogaClass not found")
+        );
+        yogaClass.setName(yogaClassDTO.getName());
+        yogaClass.setTimeAndDate(yogaClassDTO.getTimeAndDate());
+        yogaClass.setPrice(yogaClassDTO.getPrice());
+
+        YogaStyle style = yogaClass.getYogaStyle();
+        if (style == null) {
+            style = new YogaStyle();
+            style.setClassType(yogaClassDTO.getType());
+            style.setYogaClass(yogaClass);
+            yogaStyleRepository.save(style);
+            yogaClass.setYogaStyle(style);
+        } else if (style.getClassType() != yogaClassDTO.getType()) {
+            style.setClassType(yogaClassDTO.getType());
+            style = yogaStyleRepository.save(style);
+            yogaClass.setYogaStyle(style);
+        }
+
+        Studio studio = yogaStudioRepository.findByName(yogaClassDTO.getStudioName())
+                .orElseGet(() -> {
+                    Studio newStudio = new Studio();
+                    newStudio.setName(yogaClassDTO.getStudioName());
+                    newStudio.setLocation(yogaClassDTO.getStudioLocation());
+                    return yogaStudioRepository.save(newStudio);
+                });
+        yogaClass.setStudio(studio);
+
+        YogaInstructor instructor = yogaInstructorRepository.findYogaInstructorByFirstNameAndLastName(
+                        yogaClassDTO.getInstructorFirstName(),
+                        yogaClassDTO.getInstructorLastName())
+                .orElseGet(() -> {
+                    YogaInstructor newInstructor = new YogaInstructor();
+                    newInstructor.setFirstName(yogaClassDTO.getInstructorFirstName());
+                    newInstructor.setLastName(yogaClassDTO.getInstructorLastName());
+                    newInstructor.setAge(yogaClassDTO.getInstructorAge());
+                    newInstructor.setGender(yogaClassDTO.getInstructorGender());
+                    return yogaInstructorRepository.save(newInstructor);
+                });
+        yogaClass.setInstructor(instructor);
+
+        return yogaClassRepository.save(yogaClass);
 
     }
 
