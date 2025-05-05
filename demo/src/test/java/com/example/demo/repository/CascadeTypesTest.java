@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.domain.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -64,16 +65,18 @@ public class CascadeTypesTest {
         YogaStyle yogaStyle = new YogaStyle();
         yogaStyle.setClassType(KUNDALINI);
         yogaStyleRepository.save(yogaStyle);
+        Long styleGeneratedId = yogaStyle.getId();
 
         yogaClass.setYogaStyle(yogaStyle);
         yogaClassRepository.save(yogaClass);
+        Long generatedId = yogaClass.getId();
 
-        Optional<YogaClass> optionalYogaClass = yogaClassRepository.findById(100L);
+        Optional<YogaClass> optionalYogaClass = yogaClassRepository.findById(generatedId);
         assertTrue(optionalYogaClass.isPresent());
         yogaClass = optionalYogaClass.get();
 
         assertEquals(KUNDALINI, yogaClass.getYogaStyle().getClassType());
-        assertEquals(100L, yogaClass.getYogaStyle().getId());
+        assertEquals(styleGeneratedId, yogaClass.getYogaStyle().getId());
         assertEquals("Example name", yogaClass.getName());
     }
 
@@ -180,8 +183,9 @@ public class CascadeTypesTest {
 
         yogaUser.getReservations().add(yogaClass);
         yogaUserRepository.save(yogaUser);
+        Long generatedId = yogaUser.getId();
 
-        assertEquals(100L, yogaUser.getId());
+        assertEquals(generatedId, yogaUser.getId());
         assertEquals(yogaClass.getId(), yogaUser.getReservations().getFirst().getId());
     }
 

@@ -2,12 +2,14 @@ package com.example.demo.dto;
 
 import com.example.demo.domain.Gender;
 import com.example.demo.domain.YogaClassType;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
 public class YogaClassDTO {
     private String studioName;
     private String studioLocation;
+    private MultipartFile file;
     private String name;
     private LocalDateTime timeAndDate;
     private double price;
@@ -17,11 +19,11 @@ public class YogaClassDTO {
     private Integer instructorAge;
     private Gender instructorGender;
     private String formattedTimeAndDate;
-
+    private String studioPhotoPath;
 
     public YogaClassDTO() {}
 
-    public YogaClassDTO(String studioName, String studioLocation, String name, LocalDateTime timeAndDate, double price, YogaClassType type, String instructorFirstName, String instructorLastName, Integer instructorAge, Gender instructorGender) {
+    public YogaClassDTO(String studioName, String studioLocation, String name, LocalDateTime timeAndDate, double price, YogaClassType type, String instructorFirstName, String instructorLastName, Integer instructorAge, Gender instructorGender, MultipartFile file, String studioPhotoPath) {
         this.studioName = studioName;
         this.studioLocation = studioLocation;
         this.name = name;
@@ -32,6 +34,8 @@ public class YogaClassDTO {
         this.instructorLastName = instructorLastName;
         this.instructorAge = instructorAge;
         this.instructorGender = instructorGender;
+        this.file = file;
+        this.studioPhotoPath = studioPhotoPath;
     }
 
     public String getName() {
@@ -120,5 +124,21 @@ public class YogaClassDTO {
 
     public void setFormattedTimeAndDate(String formattedTimeAndDate) {
         this.formattedTimeAndDate = formattedTimeAndDate;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
+    public String getStudioPhotoPath() {
+        return studioPhotoPath;
+    }
+
+    public void setStudioPhotoPath(String studioPhotoPath) {
+        this.studioPhotoPath = studioPhotoPath;
     }
 }

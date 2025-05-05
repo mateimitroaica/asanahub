@@ -16,3 +16,7 @@ function deleteYogaClass(id) {
 function editYogaClass(id) {
     window.location.href='/yoga-classes/edit/' +id;
 }
+
+function submitFilterForm() {
+    document.getElementById('filterForm').submit();
+}

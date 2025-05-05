@@ -14,6 +14,8 @@ public class Studio {
     private String name;
     private String location;
 
+    private String photoPath;
+
     @OneToMany(mappedBy = "studio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subscription> subscriptions;
 
@@ -22,9 +24,10 @@ public class Studio {
 
     public Studio() {}
 
-    public Studio(Long id, String name, String location, List<Subscription> subscriptions, List<YogaClass> yogaClasses) {
+    public Studio(Long id, String name, String location, List<Subscription> subscriptions, List<YogaClass> yogaClasses, String photoPath) {
         this.id = id;
         this.name = name;
+        this.photoPath = photoPath;
         this.location = location;
         this.subscriptions = subscriptions;
         this.yogaClasses = yogaClasses;
@@ -78,5 +81,13 @@ public class Studio {
     public void removeSubscription(Subscription subscription) {
         subscription.setStudio(null);
         this.subscriptions.remove(subscription);
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 }

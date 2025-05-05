@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +38,7 @@ public class YogaClassServiceIntegrationTest {
     private YogaStudioRepository yogaStudioRepository;
 
     @Test
-    public void testSaveYogaClass() {
+    public void testSaveYogaClass() throws IOException {
         YogaClassDTO dto = new YogaClassDTO();
         dto.setName("Sunrise Power Flow");
         dto.setTimeAndDate(LocalDateTime.of(2025, 5, 5, 6, 30));

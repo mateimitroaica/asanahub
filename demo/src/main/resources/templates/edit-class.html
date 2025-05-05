@@ -7,11 +7,24 @@
 </head>
 <body>
 <nav class="navbar">
-    <a href="/yoga-classes">Home</a>
-    <a href="/yoga-classes/create">Create New Class</a>
+    <div class="navbar-wrapper">
+        <div class="nav-links">
+            <a href="/yoga-classes">Home</a>
+            <a href="/yoga-classes/create">Create New Class</a>
+        </div>
+
+        <form action="/yoga-classes/search" method="get" class="search-form">
+            <input type="text" name="query" placeholder="Search classes..." />
+            <button type="submit">Search</button>
+        </form>
+    </div>
 </nav>
+
 <div class="form-container">
-<form th:action="@{/yoga-classes/edit/{id}(id=${clazz.id})}" th:object="${yogaClassDTO}" method="post">
+<form th:action="@{/yoga-classes/edit/{id}(id=${clazz.id})}"
+      th:object="${yogaClassDTO}"
+      enctype="multipart/form-data"
+      method="post">
 
     <input type="hidden" name="_method" value="put"/>
 
@@ -56,6 +69,14 @@
         <option th:value="KUNDALINI" th:text="'Kundalini'"></option>
         <option th:value="BIKRAM" th:text="'Bikram'"></option>
     </select>
+
+    <div th:if="${yogaClassDTO.studioPhotoPath != null}">
+        <p>Current Studio Image:</p>
+        <img th:src="@{'/' + ${yogaClassDTO.studioPhotoPath}}" alt="Current Studio Photo" style="max-width: 250px;" />
+    </div>
+
+    <label for="file">Upload New Studio Photo:</label>
+    <input type="file" id="file" name="file" th:field="*{file}" />
 
     <button type="submit">Save Changes</button>
 

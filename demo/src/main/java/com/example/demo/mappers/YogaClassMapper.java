@@ -25,6 +25,7 @@ public class YogaClassMapper {
         dto.setInstructorLastName(yogaClass.getInstructor().getLastName());
         dto.setInstructorAge(yogaClass.getInstructor().getAge());
         dto.setInstructorGender(yogaClass.getInstructor().getGender());
+        dto.setStudioPhotoPath(yogaClass.getStudio().getPhotoPath());
 
         dto.setFormattedTimeAndDate(yogaClass.getTimeAndDate().format(formatter));
         return dto;

@@ -6,12 +6,54 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+
 <nav class="navbar">
-    <a href="/yoga-classes">Home</a>
-    <a href="/yoga-classes/create">Create New Class</a>
+    <div class="navbar-wrapper">
+        <div class="nav-links">
+            <a href="/yoga-classes">Home</a>
+            <a href="/yoga-classes/create">Create New Class</a>
+        </div>
+
+        <form action="/yoga-classes/search" method="get" class="search-form">
+            <input type="text" name="query" placeholder="Search classes..." />
+            <button type="submit">Search</button>
+        </form>
+    </div>
 </nav>
+
+
 <div class="classes-container">
+    <div class="navbar-wrapper">
+        <form action="/yoga-classes/filter" method="get" class="filter-form" id="filterForm">
+            <div class="filter-group">
+                <label for="style">Style:</label>
+                <select name="style" id="style" onchange="submitFilterForm()">
+                    <option value="">All</option>
+                    <option th:each="style : ${T(com.example.demo.domain.YogaClassType).values()}"
+                            th:value="${style}"
+                            th:text="${style}"
+                            th:selected="${param.style} == ${style}"
+                    ></option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="date">Date:</label>
+                <input type="date" name="date" id="date" th:value="${param.date}" onchange="submitFilterForm()" />
+            </div>
+        </form>
+    </div>
+
+
+
+    <div class="no-results" th:if="${searchPerformed} and ${#lists.isEmpty(classes)}">
+        <p>No results found for "<span th:text="${param.query}">search term</span>".</p>
+    </div>
     <div th:each="clazz : ${classes}" class="class-card">
+        <div th:if="${clazz.studio.photoPath != null}">
+            <img th:src="@{'/' + ${clazz.studio.photoPath}}" alt="Studio Image" class="studio-image" />
+        </div>
+
         <h2 th:text="${clazz.name}">Yoga Class Name</h2>
 
         <p><strong>Studio:</strong> <span th:text="${clazz.studio.name}">Studio Name</span> (<span th:text="${clazz.studio.location}">Location</span>)</p>

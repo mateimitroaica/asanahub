@@ -1,7 +1,8 @@
 CREATE TABLE studio (
                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(255),
-                        location VARCHAR(255)
+                        location VARCHAR(255),
+                        photo_path VARCHAR(255)
 );
 
 CREATE TABLE yoga_user (

@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Studio;
-import com.example.demo.domain.YogaClass;
-import com.example.demo.domain.YogaInstructor;
-import com.example.demo.domain.YogaStyle;
+import com.example.demo.domain.*;
 import com.example.demo.dto.YogaClassDTO;
 import com.example.demo.mappers.YogaClassMapper;
 import com.example.demo.repository.YogaClassRepository;
@@ -12,10 +9,17 @@ import com.example.demo.repository.YogaStudioRepository;
 import com.example.demo.repository.YogaStyleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class YogaClassService {
@@ -35,7 +39,7 @@ public class YogaClassService {
     }
 
 //    @Transactional
-    public YogaClass saveYogaClass(YogaClassDTO yogaClassDTO) {
+    public YogaClass saveYogaClass(YogaClassDTO yogaClassDTO) throws IOException {
         YogaClass yogaClass = YogaClassMapper.toEntity(yogaClassDTO);
 
         Studio studio;
@@ -46,6 +50,22 @@ public class YogaClassService {
             studio = existingStudio.get();
         } else {
             studio = YogaClassMapper.toStudio(yogaClassDTO);
+
+            MultipartFile photo = yogaClassDTO.getFile();
+            if (photo != null && !photo.isEmpty()) {
+                String fileName = UUID.randomUUID() + "_" + photo.getOriginalFilename();
+                Path uploadPath = Paths.get("uploads");
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(fileName);
+                Files.write(filePath, photo.getBytes());
+
+                studio.setPhotoPath("uploads/" + fileName);
+            }
+
             studio = yogaStudioRepository.save(studio);
         }
         yogaClass.setStudio(studio);
@@ -125,6 +145,27 @@ public class YogaClassService {
                     return yogaStudioRepository.save(newStudio);
                 });
         yogaClass.setStudio(studio);
+        MultipartFile newFile = yogaClassDTO.getFile();
+        if (newFile != null && !newFile.isEmpty()) {
+            try {
+                String fileName = UUID.randomUUID() + "_" + newFile.getOriginalFilename();
+                Path uploadPath = Paths.get("uploads");
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(fileName);
+                Files.write(filePath, newFile.getBytes());
+
+                studio.setPhotoPath("uploads/" + fileName);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to save new photo", e);
+            }
+        }
+
+        studio = yogaStudioRepository.save(studio);
+        yogaClass.setStudio(studio);
 
         YogaInstructor instructor = yogaInstructorRepository.findYogaInstructorByFirstNameAndLastName(
                         yogaClassDTO.getInstructorFirstName(),
@@ -142,5 +183,22 @@ public class YogaClassService {
         return yogaClassRepository.save(yogaClass);
 
     }
+
+    public List<YogaClass> findByName(String name) {
+        return yogaClassRepository.findYogaClassByNameContainingIgnoreCase(name);
+    }
+
+    public List<YogaClass> filterClasses(YogaClassType style, LocalDate date) {
+        if (style != null && date != null) {
+            return yogaClassRepository.findByYogaStyle_ClassTypeAndDate(style, date);
+        } else if (style != null) {
+            return yogaClassRepository.findByYogaStyle_ClassType(style);
+        } else if (date != null) {
+            return yogaClassRepository.findByDate(date);
+        } else {
+            return yogaClassRepository.findAll();
+        }
+    }
+
 
 }
