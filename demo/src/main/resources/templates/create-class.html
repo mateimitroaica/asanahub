@@ -19,11 +19,10 @@
     </form>
   </div>
 </nav>
-
-<h1>Create a New Yoga Class</h1>
 <div th:if="${error}" class="error-message">
   <p th:text="${error}">Something went wrong</p>
 </div>
+<div></div>
 <div class="form-container">
   <form th:action="@{/yoga-classes}"
         th:object="${yogaClassDTO}"
@@ -76,6 +75,18 @@
 
     <button type="submit">Save Yoga Class</button>
   </form>
+</div>
+<footer class="footer">
+  <div class="footer-wrapper">
+    <div class="footer-left">
+      <h3>AsanaHub</h3>
+      <p>Find your inner peace.</p>
+    </div>
 
+    <div class="footer-right">
+      <p>&copy; 2025 AsanaHub. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
 </body>
 </html>

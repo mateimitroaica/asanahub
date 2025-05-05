@@ -5,6 +5,7 @@ import com.example.demo.domain.YogaClassType;
 import com.example.demo.dto.YogaClassDTO;
 import com.example.demo.mappers.YogaClassMapper;
 import com.example.demo.service.YogaClassService;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,11 +24,46 @@ public class YogaClassController {
     public YogaClassController(YogaClassService yogaClassService) {
         this.yogaClassService = yogaClassService;
     }
+@GetMapping
+public String listPaginatedClasses(@RequestParam(defaultValue = "0") int page, Model model) {
+    Page<YogaClass> classPage = yogaClassService.getPaginatedClasses(page, 2);
+    model.addAttribute("classes", classPage.getContent());
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", classPage.getTotalPages());
+    model.addAttribute("baseUrl", "/yoga-classes");
+    return "classes-list";
+}
 
-    @GetMapping
-    public String showAllClasses(Model model) {
-        List<YogaClass> classes = yogaClassService.findAllClasses();
-        model.addAttribute("classes", classes);
+    @GetMapping("/search")
+    public String searchClasses(@RequestParam("query") String query,
+                                @RequestParam(defaultValue = "0") int page,
+                                Model model) {
+        Page<YogaClass> classPage = yogaClassService.searchPaginated(query, page, 2);
+        model.addAttribute("classes", classPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", classPage.getTotalPages());
+        model.addAttribute("baseUrl", "/yoga-classes/search?query=" + query);
+        model.addAttribute("searchPerformed", true);
+        return "classes-list";
+    }
+
+    @GetMapping("/filter")
+    public String filterClasses(@RequestParam(required = false) YogaClassType style,
+                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                @RequestParam(defaultValue = "0") int page,
+                                Model model) {
+        Page<YogaClass> classPage = yogaClassService.filterPaginated(style, date, page, 2);
+        model.addAttribute("classes", classPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", classPage.getTotalPages());
+
+        String baseUrl = "/yoga-classes/filter?";
+        if (style != null) baseUrl += "style=" + style + "&";
+        if (date != null) baseUrl += "date=" + date + "&";
+        baseUrl = baseUrl.replaceAll("&$", "");
+
+        model.addAttribute("baseUrl", baseUrl);
+        model.addAttribute("searchPerformed", true);
         return "classes-list";
     }
 
@@ -37,25 +73,6 @@ public class YogaClassController {
         return "create-class";
     }
 
-    @GetMapping("/filter")
-    public String filterClasses(@RequestParam(required = false) YogaClassType style,
-                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                                Model model) {
-
-        List<YogaClass> filtered = yogaClassService.filterClasses(style, date);
-        model.addAttribute("classes", filtered);
-        model.addAttribute("searchPerformed", true);
-        return "classes-list";
-    }
-
-
-    @GetMapping("/search")
-    public String searchClasses(@RequestParam("query") String query, Model model) {
-        List<YogaClass> filteredClasses = yogaClassService.findByName(query);
-        model.addAttribute("classes", filteredClasses);
-        model.addAttribute("searchPerformed", true);
-        return "classes-list";
-    }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {

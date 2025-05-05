@@ -8,6 +8,9 @@ import com.example.demo.repository.YogaInstructorRepository;
 import com.example.demo.repository.YogaStudioRepository;
 import com.example.demo.repository.YogaStyleRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -184,21 +187,42 @@ public class YogaClassService {
 
     }
 
-    public List<YogaClass> findByName(String name) {
-        return yogaClassRepository.findYogaClassByNameContainingIgnoreCase(name);
+//    public List<YogaClass> findByName(String name) {
+//        return yogaClassRepository.findYogaClassByNameContainingIgnoreCase(name);
+//    }
+//
+//    public List<YogaClass> filterClasses(YogaClassType style, LocalDate date) {
+//        if (style != null && date != null) {
+//            return yogaClassRepository.findByYogaStyle_ClassTypeAndDate(style, date);
+//        } else if (style != null) {
+//            return yogaClassRepository.findByYogaStyle_ClassType(style);
+//        } else if (date != null) {
+//            return yogaClassRepository.findByDate(date);
+//        } else {
+//            return yogaClassRepository.findAll();
+//        }
+//    }
+    public Page<YogaClass> getPaginatedClasses(int page, int size) {
+        return yogaClassRepository.findAll(PageRequest.of(page, size));
     }
 
-    public List<YogaClass> filterClasses(YogaClassType style, LocalDate date) {
+    public Page<YogaClass> searchPaginated(String query, int page, int size) {
+        return yogaClassRepository.findByNameContainingIgnoreCase(query, PageRequest.of(page, size));
+    }
+
+    public Page<YogaClass> filterPaginated(YogaClassType style, LocalDate date, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         if (style != null && date != null) {
-            return yogaClassRepository.findByYogaStyle_ClassTypeAndDate(style, date);
+            return yogaClassRepository.findByYogaStyle_ClassTypeAndDate(style, date, pageable);
         } else if (style != null) {
-            return yogaClassRepository.findByYogaStyle_ClassType(style);
+            return yogaClassRepository.findByYogaStyle_ClassType(style, pageable);
         } else if (date != null) {
-            return yogaClassRepository.findByDate(date);
+            return yogaClassRepository.findByDate(date, pageable);
         } else {
-            return yogaClassRepository.findAll();
+            return yogaClassRepository.findAll(pageable);
         }
     }
+
 
 
 }
