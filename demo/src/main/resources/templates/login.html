@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Log in</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="page-wrapper">
+    <nav class="navbar">
+        <div class="navbar-wrapper">
+            <div class="nav-section-left">
+                <div class="nav-links">
+                    <a href="/yoga-classes">Home</a>
+                </div>
+            </div>
+            <div class="auth-links">
+                <a href="/register">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content-wrapper">
+        <div class="form-container">
+            <h2>Log in</h2>
+
+            <form th:action="@{/login}" method="post">
+                <label for="username">Email:</label>
+                <input type="email" id="username" name="username" required/>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required/>
+
+                <button type="submit">Login</button>
+
+                <div class="error-message" th:if="${loginError}">
+                    Invalid username or password.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-wrapper">
+            <div class="footer-left">
+                <h3>AsanaHub</h3>
+                <p>Find your inner peace.</p>
+            </div>
+
+            <div class="footer-right">
+                <p>&copy; 2025 AsanaHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

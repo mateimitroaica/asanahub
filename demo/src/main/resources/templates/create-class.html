@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
   <meta charset="UTF-8">
   <title>Create Yoga Class</title>
@@ -8,16 +11,35 @@
 <body>
 <nav class="navbar">
   <div class="navbar-wrapper">
-    <div class="nav-links">
-      <a href="/yoga-classes">Home</a>
-      <a href="/yoga-classes/create">Create New Class</a>
+    <div class="nav-section-left">
+      <div class="nav-links">
+        <a href="/yoga-classes">Home</a>
+        <span sec:authorize="isAuthenticated() and hasRole('ADMIN')">
+                <a href="/yoga-classes/create">Create New Class</a>
+                </span>
+        <span sec:authorize="isAuthenticated() and hasRole('USER')">
+                <a href="/profile">Profile</a>
+                </span>
+      </div>
+
+      <div class="auth-links">
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display:inline;">
+          <button type="submit" class="logout-button">Logout</button>
+        </form>
+
+        <span sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </span>
+      </div>
     </div>
 
     <form action="/yoga-classes/search" method="get" class="search-form">
-      <input type="text" name="query" placeholder="Search classes..." />
+      <input type="text" name="query" placeholder="Search classes" />
       <button type="submit">Search</button>
     </form>
   </div>
+
 </nav>
 <div th:if="${error}" class="error-message">
   <p th:text="${error}">Something went wrong</p>

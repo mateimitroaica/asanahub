@@ -18,6 +18,9 @@ public class YogaUser {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -33,7 +36,7 @@ public class YogaUser {
 
     public YogaUser(){}
 
-    public YogaUser(Long id, String firstName, String lastName, Integer age, String email, String password, Gender gender, List<Subscription> subscriptions, List<YogaClass> reservations) {
+    public YogaUser(Long id, String firstName, String lastName, Integer age, String email, String password, Gender gender, List<Subscription> subscriptions, List<YogaClass> reservations, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,6 +46,7 @@ public class YogaUser {
         this.gender = gender;
         this.subscriptions = subscriptions;
         this.reservations = reservations;
+        this.role = role;
     }
 
     public Long getId() {
@@ -125,5 +129,13 @@ public class YogaUser {
     public void removeSubscription(Subscription subscription) {
         subscriptions.remove(subscription);
         this.subscriptions.remove(subscription);
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

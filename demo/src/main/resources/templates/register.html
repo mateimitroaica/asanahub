@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="navbar-wrapper">
+        <div class="nav-section-left">
+            <div class="nav-links">
+                <a href="/yoga-classes">Home</a>
+            </div>
+        </div>
+        <div class="auth-links">
+            <a href="/login">Login</a>
+        </div>
+    </div>
+</nav>
+
+<div class="form-container">
+    <h2>Create Account</h2>
+
+    <form th:action="@{/register}" th:object="${yogaUser}" method="post">
+        <label>First Name:</label>
+        <input type="text" th:field="*{firstName}" required/>
+
+        <label>Last Name:</label>
+        <input type="text" th:field="*{lastName}" required/>
+
+        <label>Age:</label>
+        <input type="number" th:field="*{age}" min="0" required/>
+
+        <label>Gender:</label>
+        <select th:field="*{gender}" required>
+            <option value="" disabled selected>Choose...</option>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+        </select>
+
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required/>
+
+        <label>Password:</label>
+        <input type="password" th:field="*{password}" required/>
+
+        <label>Confirm Password:</label>
+        <input type="password" name="confirmPassword" required/>
+
+        <button type="submit">Register</button>
+    </form>
+
+</div>
+
+<footer class="footer">
+    <div class="footer-wrapper">
+        <div class="footer-left">
+            <h3>AsanaHub</h3>
+            <p>Find your inner peace.</p>
+        </div>
+
+        <div class="footer-right">
+            <p>&copy; 2025 AsanaHub. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
