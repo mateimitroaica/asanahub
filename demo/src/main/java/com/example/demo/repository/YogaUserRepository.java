@@ -17,4 +17,6 @@ public interface YogaUserRepository extends JpaRepository<YogaUser, Long> {
     Optional<YogaUser> findYogaUsersByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    Optional<YogaUser> findByEmail(String email);
 }

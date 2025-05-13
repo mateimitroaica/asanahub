@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${yogaClass.name}">Yoga Class Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-wrapper">
+        <div class="nav-section-left">
+            <div class="nav-links">
+                <a href="/yoga-classes">Home</a>
+                <span sec:authorize="isAuthenticated() and hasRole('ADMIN')">
+                <a href="/yoga-classes/create">Create New Class</a>
+                </span>
+                <span sec:authorize="isAuthenticated() and hasRole('USER')">
+                <a href="/profile">Profile</a>
+                </span>
+            </div>
+
+            <div class="auth-links">
+
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+
+                <span sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </span>
+            </div>
+        </div>
+
+        <form action="/yoga-classes/search" method="get" class="search-form">
+            <input type="text" name="query" placeholder="Search classes" />
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+</nav>
+
+<main class="main-content">
+    <div class="class-card">
+        <h2 th:text="${yogaClass.name}">Class Name</h2>
+
+        <div th:if="${yogaClass.studio.photoPath != null}">
+            <img th:src="@{'/' + ${yogaClass.studio.photoPath}}" alt="Studio Image" class="studio-image"/>
+        </div>
+
+        <p><strong>Studio:</strong> <span th:text="${yogaClass.studio.name}">Studio</span> (<span th:text="${yogaClass.studio.location}">Location</span>)</p>
+        <p><strong>Instructor:</strong> <span th:text="${yogaClass.instructor.firstName + ' ' + yogaClass.instructor.lastName}">Instructor Name</span></p>
+        <p><strong>Date:</strong> <span th:text="${#temporals.format(yogaClass.timeAndDate, 'dd MMM yyyy')}">Date</span></p>
+        <p><strong>Time:</strong> <span th:text="${#temporals.format(yogaClass.timeAndDate, 'HH:mm')}">Time</span></p>
+        <p><strong>Price:</strong> $<span th:text="${yogaClass.price}">Price</span></p>
+        <p><strong>Style:</strong> <span th:text="${yogaClass.yogaStyle.classType}">Style</span></p>
+
+        <div class="button-group">
+            <form th:action="@{/subscription/new}" method="get" style="display: inline;">
+                <input type="hidden" name="classId" th:value="${yogaClass.id}" />
+                <button type="submit" class="subscribe-button">Buy Subscription</button>
+            </form>
+            <form th:action="@{/reservations/enroll}" method="post" th:if="${!enrolled}">
+                <input type="hidden" name="classId" th:value="${yogaClass.id}" />
+                <button type="submit" class="reserve-button">Reserve a Spot</button>
+            </form>
+            <button class="reserve-button" disabled th:if="${enrolled}">Already Reserved</button>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-wrapper">
+        <div class="footer-left">
+            <h3>AsanaHub</h3>
+            <p>Find your inner peace.</p>
+        </div>
+
+        <div class="footer-right">
+            <p>&copy; 2025 AsanaHub. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

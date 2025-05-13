@@ -70,7 +70,7 @@ public class AuthController {
 
             Authentication auth = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
-            
+
             HttpSession session = request.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                     SecurityContextHolder.getContext());
@@ -81,13 +81,6 @@ public class AuthController {
             return "redirect:/login?error";
         }
 
-//        Authentication authentication = authenticationManager.authenticate(
-//          new UsernamePasswordAuthenticationToken(
-//                  dto.getEmail(), dto.getPassword()
-//          )
-//        );
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        return "redirect:/yoga-classes";
+
     }
 }

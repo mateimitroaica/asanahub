@@ -70,7 +70,10 @@
     <div class="no-results" th:if="${searchPerformed} and ${#lists.isEmpty(classes)}">
         <p>No results found for "<span th:text="${param.query}">search term</span>".</p>
     </div>
-    <div th:each="clazz : ${classes}" class="class-card">
+
+    <div th:each="clazz : ${classes}">
+        <a th:href="@{/yoga-classes/{id}(id=${clazz.id})}" class="class-card-link">
+        <div class="class-card">
         <div th:if="${clazz.studio.photoPath != null}">
             <img th:src="@{'/' + ${clazz.studio.photoPath}}" alt="Studio Image" class="studio-image" />
         </div>
@@ -97,8 +100,10 @@
                 Delete
             </button>
         </div>
-
+        </div>
+        </a>
     </div>
+
     <div class="pagination" th:if="${totalPages > 1}">
         <a th:if="${currentPage > 0}"
            th:href="@{${baseUrl}(page=${currentPage - 1})}">Previous</a>

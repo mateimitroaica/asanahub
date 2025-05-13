@@ -368,3 +368,45 @@ form button:hover {
     flex: 1;
     padding: 80px 20px 20px 20px;
 }
+
+.class-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.subscribe-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.reserve-button{
+    background-color: #2196F3; /* Blue */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.reserve-button:hover {
+    background-color: #1976D2;
+}
+
+.subscribe-button:hover {
+    background-color: #45a049;
+}
+
+.highlighted {
+    border: 2px solid #4CAF50;
+    padding: 10px;
+    background-color: #eaffea;
+}

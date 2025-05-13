@@ -7,7 +7,7 @@ import com.example.demo.repository.YogaClassRepository;
 import com.example.demo.repository.YogaInstructorRepository;
 import com.example.demo.repository.YogaStudioRepository;
 import com.example.demo.repository.YogaStyleRepository;
-import jakarta.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +41,6 @@ public class YogaClassService {
         this.yogaStyleRepository = yogaStyleRepository;
     }
 
-//    @Transactional
     public YogaClass saveYogaClass(YogaClassDTO yogaClassDTO) throws IOException {
         YogaClass yogaClass = YogaClassMapper.toEntity(yogaClassDTO);
 
@@ -187,21 +186,7 @@ public class YogaClassService {
 
     }
 
-//    public List<YogaClass> findByName(String name) {
-//        return yogaClassRepository.findYogaClassByNameContainingIgnoreCase(name);
-//    }
-//
-//    public List<YogaClass> filterClasses(YogaClassType style, LocalDate date) {
-//        if (style != null && date != null) {
-//            return yogaClassRepository.findByYogaStyle_ClassTypeAndDate(style, date);
-//        } else if (style != null) {
-//            return yogaClassRepository.findByYogaStyle_ClassType(style);
-//        } else if (date != null) {
-//            return yogaClassRepository.findByDate(date);
-//        } else {
-//            return yogaClassRepository.findAll();
-//        }
-//    }
+
     public Page<YogaClass> getPaginatedClasses(int page, int size) {
         return yogaClassRepository.findAll(PageRequest.of(page, size));
     }

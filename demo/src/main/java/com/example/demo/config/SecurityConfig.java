@@ -18,6 +18,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/yoga-classes/create", "/yoga-classes/edit/**").authenticated()
+                        .requestMatchers("/reservations/enroll").authenticated()
+                        .requestMatchers("/subscription/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
