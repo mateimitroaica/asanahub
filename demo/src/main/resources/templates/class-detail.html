@@ -56,16 +56,28 @@
         <p><strong>Style:</strong> <span th:text="${yogaClass.yogaStyle.classType}">Style</span></p>
 
         <div class="button-group">
-            <form th:action="@{/subscription/new}" method="get" style="display: inline;">
-                <input type="hidden" name="classId" th:value="${yogaClass.id}" />
-                <button type="submit" class="subscribe-button">Buy Subscription</button>
-            </form>
+            <div th:if="${hasActiveProSub}">
+                <p class="subscription-info">
+                    You already have an available subscription for this studio's classes.
+                </p>
+            </div>
+
+            <div th:if="${!hasActiveProSub}">
+                <form th:action="@{/subscription/new}" method="get">
+                    <input type="hidden" name="classId" th:value="${yogaClass.id}" />
+                    <button type="submit" class="subscribe-button">Buy Subscription</button>
+                </form>
+            </div>
+
             <form th:action="@{/reservations/enroll}" method="post" th:if="${!enrolled}">
                 <input type="hidden" name="classId" th:value="${yogaClass.id}" />
                 <button type="submit" class="reserve-button">Reserve a Spot</button>
             </form>
+
             <button class="reserve-button" disabled th:if="${enrolled}">Already Reserved</button>
         </div>
+
+
     </div>
 </main>
 

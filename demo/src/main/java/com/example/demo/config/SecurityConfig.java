@@ -17,7 +17,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/yoga-classes/create", "/yoga-classes/edit/**").authenticated()
+                        .requestMatchers("/yoga-classes/create", "/yoga-classes/edit/**", "/yoga-classes/delete/**").hasRole("ADMIN")
                         .requestMatchers("/reservations/enroll").authenticated()
                         .requestMatchers("/subscription/**").authenticated()
                         .anyRequest().permitAll()

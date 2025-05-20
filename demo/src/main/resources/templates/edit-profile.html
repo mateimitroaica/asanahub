@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="navbar-wrapper">
+        <div class="nav-section-left">
+            <div class="nav-links">
+                <a href="/yoga-classes">Home</a>
+                <span sec:authorize="isAuthenticated() and hasRole('ADMIN')">
+                <a href="/yoga-classes/create">Create New Class</a>
+                </span>
+                <span sec:authorize="isAuthenticated() and hasRole('USER')">
+                <a href="/profile">Profile</a>
+                </span>
+            </div>
+
+            <div class="auth-links">
+
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+
+                <span sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </span>
+            </div>
+        </div>
+
+        <form action="/yoga-classes/search" method="get" class="search-form">
+            <input type="text" name="query" placeholder="Search classes" />
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+</nav>
+
+<div class="form-container">
+    <h2>Edit Profile</h2>
+
+    <form th:action="@{/profile/edit}" th:object="${userUpdate}" method="post">
+        <label>First Name:</label>
+        <input type="text" th:field="*{firstName}" required />
+
+        <label>Last Name:</label>
+        <input type="text" th:field="*{lastName}" required />
+
+        <label>Age:</label>
+        <input type="number" th:field="*{age}" min="0" required />
+
+        <label>Gender:</label>
+        <select th:field="*{gender}" required>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+        </select>
+
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required />
+
+        <hr />
+
+        <label>Current Password:</label>
+        <input type="password" th:field="*{currentPassword}" />
+
+        <label>New Password:</label>
+        <input type="password" th:field="*{newPassword}" />
+
+        <label>Confirm New Password:</label>
+        <input type="password" th:field="*{confirmPassword}" />
+
+        <button type="submit">Update Profile</button>
+    </form>
+</div>
+
+<footer class="footer">
+    <div class="footer-wrapper">
+        <div class="footer-left">
+            <h3>AsanaHub</h3>
+            <p>Find your inner peace.</p>
+        </div>
+
+        <div class="footer-right">
+            <p>&copy; 2025 AsanaHub. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

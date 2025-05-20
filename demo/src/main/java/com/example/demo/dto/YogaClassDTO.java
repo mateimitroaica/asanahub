@@ -2,20 +2,33 @@ package com.example.demo.dto;
 
 import com.example.demo.domain.Gender;
 import com.example.demo.domain.YogaClassType;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
 public class YogaClassDTO {
+    @NotBlank(message = "Studio name is required.")
     private String studioName;
     private String studioLocation;
     private MultipartFile file;
+    @NotBlank(message = "Class name is required.")
     private String name;
+    @NotNull(message = "Date and time are required.")
     private LocalDateTime timeAndDate;
+    @NotNull(message = "Price is required.")
+    @DecimalMin(value = "1.0", message = "Price must be greater than 0.")
     private double price;
+    @NotNull(message = "Yoga class type is required.")
     private YogaClassType type;
+    @NotBlank(message = "Instructor first name is required.")
     private String instructorFirstName;
+    @NotBlank(message = "Instructor last name is required.")
     private String instructorLastName;
+    @Min(value = 0, message = "Instructor age must be a positive number.")
     private Integer instructorAge;
     private Gender instructorGender;
     private String formattedTimeAndDate;

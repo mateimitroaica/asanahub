@@ -69,16 +69,26 @@
 
     <div class="form-container" id="reservations" th:classappend="${highlight == 'res'} ? 'highlighted'">
         <h3>Your Class Reservations</h3>
+
         <div th:if="${#lists.isEmpty(reservations)}">
             <p>No classes reserved yet.</p>
         </div>
+
         <ul th:if="${!#lists.isEmpty(reservations)}">
-            <li th:each="cls : ${reservations}">
-                <a th:href="@{/yoga-classes/{id}(id=${cls.id})}" th:text="${cls.name}">Class Name</a> -
-                <span th:text="${#temporals.format(cls.timeAndDate, 'dd MMM yyyy HH:mm')}">Date</span>
+            <li th:each="cls : ${reservations}" class="reservation-item">
+        <span>
+            <a th:href="@{/yoga-classes/{id}(id=${cls.id})}" th:text="${cls.name}">Class Name</a> -
+            <span th:text="${#temporals.format(cls.timeAndDate, 'dd MMM yyyy HH:mm')}">Date</span>
+        </span>
+
+                <form th:action="@{/reservations/cancel}" method="post">
+                    <input type="hidden" name="classId" th:value="${cls.id}" />
+                    <button type="submit" class="cancel-button">Cancel</button>
+                </form>
             </li>
         </ul>
     </div>
+
 </main>
 
 <footer class="footer">

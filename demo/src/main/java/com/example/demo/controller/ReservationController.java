@@ -32,4 +32,11 @@ public class ReservationController {
 
         return "redirect:/profile?highlight=res";
     }
+
+    @PostMapping("/cancel")
+    public String cancelReservation(@RequestParam("classId") Long classId, Principal principal) {
+        String userEmail = principal.getName();
+        reservationService.cancelReservation(userEmail, classId);
+        return "redirect:/profile?highlight=res";
+    }
 }

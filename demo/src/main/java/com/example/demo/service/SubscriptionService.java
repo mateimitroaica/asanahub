@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.*;
+import com.example.demo.exceptions.SubscriptionConflictException;
+import com.example.demo.exceptions.UserNotFoundException;
+import com.example.demo.exceptions.YogaClassNotFoundException;
 import com.example.demo.repository.SubscriptionRepository;
 import com.example.demo.repository.YogaClassRepository;
 import com.example.demo.repository.YogaUserRepository;
@@ -26,29 +29,45 @@ public class SubscriptionService {
 
     public void createSubscription(String userEmail, SubscriptionType type, Long classId) {
         YogaUser user = yogaUserRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(userEmail));
 
         YogaClass yogaClass = yogaClassRepository.findById(classId)
-                .orElseThrow(() -> new RuntimeException("Class not found"));
+                .orElseThrow(() -> new YogaClassNotFoundException(classId));
 
         Studio studio = yogaClass.getStudio();
 
-        Subscription subscription = new Subscription();
-        subscription.setSubscriptionType(type);
+        Optional<Subscription> existing = user.getSubscriptions().stream()
+                .filter(s -> s.getStudio().getId().equals(studio.getId()) && s.getActive())
+                .findFirst();
 
-        if (type == SubscriptionType.STANDARD) {
-            subscription.setPrice(50.0);
-        } else if (type == SubscriptionType.PRO) {
-            subscription.setPrice(90.0);
+        if (existing.isPresent()) {
+            Subscription sub = existing.get();
+
+            if (sub.getSubscriptionType() == SubscriptionType.PRO) {
+                throw new SubscriptionConflictException("You already have a PRO subscription for this studio.");
+            }
+
+            if (sub.getSubscriptionType() == SubscriptionType.STANDARD && type == SubscriptionType.PRO) {
+                sub.setSubscriptionType(SubscriptionType.PRO);
+                sub.setPrice(90.0);
+                subscriptionRepository.save(sub);
+                return;
+            }
+
+            throw new SubscriptionConflictException("You already have an active subscription for this studio.");
         }
 
-        subscription.setStartDate(new Date());
+        Subscription subscription = new Subscription();
+        subscription.setSubscriptionType(type);
+        subscription.setPrice(type == SubscriptionType.PRO ? 90.0 : 50.0);
 
+        Date startDate = new Date();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(subscription.getStartDate());
+        cal.setTime(startDate);
         cal.add(Calendar.MONTH, 1);
-        subscription.setEndDate(cal.getTime());
 
+        subscription.setStartDate(startDate);
+        subscription.setEndDate(cal.getTime());
         subscription.setActive(true);
         subscription.setStudio(studio);
         subscription.setUser(user);

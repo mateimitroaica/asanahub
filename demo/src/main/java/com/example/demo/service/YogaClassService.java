@@ -2,11 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.domain.*;
 import com.example.demo.dto.YogaClassDTO;
+import com.example.demo.exceptions.YogaClassNotFoundException;
 import com.example.demo.mappers.YogaClassMapper;
-import com.example.demo.repository.YogaClassRepository;
-import com.example.demo.repository.YogaInstructorRepository;
-import com.example.demo.repository.YogaStudioRepository;
-import com.example.demo.repository.YogaStyleRepository;
+import com.example.demo.repository.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,15 +28,18 @@ public class YogaClassService {
     private final YogaStudioRepository yogaStudioRepository;
     private final YogaInstructorRepository yogaInstructorRepository;
     private final YogaStyleRepository yogaStyleRepository;
+    private final YogaUserRepository yogaUserRepository;
 
     public YogaClassService(YogaClassRepository yogaClassRepository,
                             YogaStudioRepository yogaStudioRepository,
                             YogaInstructorRepository yogaInstructorRepository,
-                            YogaStyleRepository yogaStyleRepository) {
+                            YogaStyleRepository yogaStyleRepository,
+                            YogaUserRepository yogaUserRepository) {
         this.yogaClassRepository = yogaClassRepository;
         this.yogaStudioRepository = yogaStudioRepository;
         this.yogaInstructorRepository = yogaInstructorRepository;
         this.yogaStyleRepository = yogaStyleRepository;
+        this.yogaUserRepository = yogaUserRepository;
     }
 
     public YogaClass saveYogaClass(YogaClassDTO yogaClassDTO) throws IOException {
@@ -103,17 +104,31 @@ public class YogaClassService {
     }
 
     public YogaClass findYogaClassById(Long id) {
-        return yogaClassRepository.findById(id).orElse(null);
+        return yogaClassRepository.findById(id).orElseThrow(
+                () -> new YogaClassNotFoundException(id)
+        );
     }
 
     public void deleteYogaClass(Long id) {
-        Optional<YogaClass> optionalYogaClass = yogaClassRepository.findById(id);
-        if (optionalYogaClass.isPresent()){
-            YogaClass yogaClass = optionalYogaClass.get();
-            YogaStyle style = yogaClass.getYogaStyle();
+        YogaClass yogaClass = yogaClassRepository.findById(id)
+                .orElseThrow(() -> new YogaClassNotFoundException(id));
+
+        List<YogaUser> allUsers = yogaUserRepository.findAll();
+        for (YogaUser user : allUsers) {
+            user.getReservations().remove(yogaClass);
+        }
+        yogaUserRepository.saveAll(allUsers);
+
+        YogaStyle style = yogaClass.getYogaStyle();
+        if (style != null) {
             yogaClass.setYogaStyle(null);
             style.setYogaClass(null);
-            yogaClassRepository.delete(yogaClass);
+            yogaStyleRepository.save(style);
+        }
+
+        yogaClassRepository.delete(yogaClass);
+
+        if (style != null) {
             yogaStyleRepository.delete(style);
         }
     }
@@ -146,6 +161,7 @@ public class YogaClassService {
                     newStudio.setLocation(yogaClassDTO.getStudioLocation());
                     return yogaStudioRepository.save(newStudio);
                 });
+        studio.setLocation(yogaClassDTO.getStudioLocation());
         yogaClass.setStudio(studio);
         MultipartFile newFile = yogaClassDTO.getFile();
         if (newFile != null && !newFile.isEmpty()) {
@@ -180,6 +196,8 @@ public class YogaClassService {
                     newInstructor.setGender(yogaClassDTO.getInstructorGender());
                     return yogaInstructorRepository.save(newInstructor);
                 });
+        instructor.setAge(yogaClassDTO.getInstructorAge());
+        instructor.setGender(yogaClassDTO.getInstructorGender());
         yogaClass.setInstructor(instructor);
 
         return yogaClassRepository.save(yogaClass);

@@ -58,13 +58,13 @@
     <input type="datetime-local" id="timeAndDate" th:field="*{timeAndDate}" required />
 
     <label for="price">Price:</label>
-    <input type="number" id="price" th:field="*{price}" step="0.01" required />
+    <input type="number" id="price" th:field="*{price}" step="1.0" required />
 
     <label for="studioName">Studio Name:</label>
     <input type="text" id="studioName" th:field="*{studioName}" required />
 
     <label for="studioLocation">Studio Location:</label>
-    <input type="text" id="studioLocation" th:field="*{studioLocation}" required />
+    <input type="text" id="studioLocation" th:field="*{studioLocation}" />
 
     <label for="instructorFirstName">Instructor First Name:</label>
     <input type="text" id="instructorFirstName" th:field="*{instructorFirstName}" required />
@@ -73,10 +73,10 @@
     <input type="text" id="instructorLastName" th:field="*{instructorLastName}" required />
 
     <label for="instructorAge">Instructor Age:</label>
-    <input type="number" id="instructorAge" th:field="*{instructorAge}" required />
+    <input type="number" id="instructorAge" th:field="*{instructorAge}" />
 
     <label for="instructorGender">Instructor Gender:</label>
-    <select id="instructorGender" th:field="*{instructorGender}" required>
+    <select id="instructorGender" th:field="*{instructorGender}">
       <option value="FEMALE">Female</option>
       <option value="MALE">Male</option>
     </select>

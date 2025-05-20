@@ -19,7 +19,6 @@
 
             <div class="auth-links">
             <span sec:authorize="isAuthenticated()">
-                Welcome, <span sec:authentication="name"></span> |
                 <a href="/logout">Logout</a>
             </span>
                 <span sec:authorize="isAnonymous()">
@@ -52,7 +51,7 @@
            th:value="${yogaClassDTO.formattedTimeAndDate}" />
 
     <label>Price:</label>
-    <input type="number" th:field="*{price}" step="0.01"/>
+    <input type="number" th:field="*{price}" step="1.0"/>
 
     <label>Studio Name:</label>
     <input type="text" th:field="*{studioName}" />
