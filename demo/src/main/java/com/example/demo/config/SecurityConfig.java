@@ -20,6 +20,7 @@ public class SecurityConfig {
                         .requestMatchers("/yoga-classes/create", "/yoga-classes/edit/**", "/yoga-classes/delete/**").hasRole("ADMIN")
                         .requestMatchers("/reservations/enroll").authenticated()
                         .requestMatchers("/subscription/**").authenticated()
+                        .requestMatchers("/profile/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

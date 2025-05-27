@@ -9,6 +9,7 @@ CREATE TABLE yoga_user (
                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                            first_name VARCHAR(100),
                            last_name VARCHAR(100),
+                           role VARCHAR(255),
                            age INT,
                            email VARCHAR(255),
                            password VARCHAR(255),
